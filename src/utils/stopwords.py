@@ -1,0 +1,18 @@
+special_stopwords = [
+    'CLASS',
+    'CONTAINER',
+    'TM-ARTICLE-PRESENTER',
+    'PRESENTER', 'LAYOUT',
+    'MAIN', 'TM',
+    'ARTICLE', 'CONTENT',
+    'PRESENT', 'NARROW',
+    'TM-LAYOUT',
+    'proposed',
+    'paper', 'ieee',
+    'problem', 'approach',
+    "статья",
+    "работа",
+    "based",
+    "рассмотреть",
+    "исследование",
+]

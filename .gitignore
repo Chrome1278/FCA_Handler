@@ -1,0 +1,7 @@
+.venv
+.idea
+data/*
+data/docs/*
+data/logs/*
+data/metrics/*
+notebooks
