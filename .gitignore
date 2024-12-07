@@ -1,7 +1,7 @@
 .venv
 .idea
-data/*
 data/docs/*
 data/logs/*
 data/metrics/*
+!data/*/.gitkeep
 notebooks
