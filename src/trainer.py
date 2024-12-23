@@ -1,6 +1,8 @@
 import logging
 
+import numpy as np
 import pandas as pd
+import scipy
 from nltk.corpus import stopwords
 
 from sklearn.feature_extraction.text import CountVectorizer
@@ -91,7 +93,7 @@ class TrainerFCA:
         elif self.mode == 'terms':
             vectorizer_count = CountVectorizer(
                 token_pattern=r'[^\t]+',
-                min_df=3,
+                min_df=1,
                 max_features=self.max_features
             )
         sparse_train = vectorizer_count.fit_transform(corpus_train)
@@ -100,6 +102,26 @@ class TrainerFCA:
         vectorizer_tfidf = TfidfTransformer()
         X_train = vectorizer_tfidf.fit_transform(sparse_train)
         X_test = vectorizer_tfidf.transform(sparse_test)
+
+        feature_names = vectorizer_count.get_feature_names_out()
+
+        if self.mode == 'terms':
+            terms_weight_dict = {}
+            for terms, weights in zip(self.df['terms'], self.df['terms_weights']):
+                for term, weight in zip(terms, weights):
+                    terms_weight_dict[term.lower()] = int(weight)
+
+            weight_vector = np.array([terms_weight_dict.get(term, 1) for term in feature_names])
+            weight_matrix = scipy.sparse.diags(weight_vector)
+
+            X_train = X_train.tocsr()
+            X_test = X_test.tocsr()
+            X_train = X_train.dot(weight_matrix)
+            X_test = X_test.dot(weight_matrix)
+
+            logger.info(f'Number of terms with weights: {len(terms_weight_dict)}')
+
+        logger.info(f'Number of feature names: {len(feature_names)}')
 
         y_train, y_test, class_names, binarizer = binarize_target(
             train_df, test_df, self.category_col_name, return_binarizer=True
