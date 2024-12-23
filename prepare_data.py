@@ -11,7 +11,7 @@ INDEX_OBJECTS = ['TERM', 'TERMTREE', 'TERMTREELOW']
 # Пороговое значение веса для терминов
 WEIGHT_THRESHOLD = 5
 # путь сохранения результата с названием файла без расширения
-SAVE_RESULT_PATH = './data/actual_docs_df_with_all_terms'
+SAVE_RESULT_PATH = './data/docs/actual_docs_df_with_all_terms'
 
 
 if __name__ == "__main__":
@@ -26,7 +26,7 @@ if __name__ == "__main__":
     actual_docs_df[['terms', 'terms_weights']] = actual_docs_df.apply(
         lambda row: processor.extract_terms_data(row, INDEX_OBJECTS, WEIGHT_THRESHOLD), axis=1
     )
-    actual_docs_df = actual_docs_df[['DocId', 'TEXT_THEMAN_ANNO', 'GRNTI', 'terms']]
+    actual_docs_df = actual_docs_df[['DocId', 'TEXT_THEMAN_ANNO', 'GRNTI', 'terms', 'terms_weights']]
     print('Total count of documents in dataframe:', actual_docs_df.shape[0])
 
     actual_docs_df.to_csv(SAVE_RESULT_PATH + ".csv", index=False, encoding='utf-8-sig')
